@@ -48,7 +48,7 @@ import NProgress  from "nprogress";
     return access_token;
   };
 
-  export const getEvents = async () => {
+  export const getEvents = async (numberOfEvents) => {
     NProgress.start();
   
     if (window.location.href.startsWith("http://localhost")) {
@@ -61,7 +61,7 @@ import NProgress  from "nprogress";
   
     if (token) {
       removeQuery();
-      const url = 'https://tl6jkkf139.execute-api.us-west-1.amazonaws.com/dev/api/get-events' + '/' + token;
+      const url = `https://tl6jkkf139.execute-api.us-west-1.amazonaws.com/dev/api/get-events/${token}?numberOfEvents=${numberOfEvents}`;
       const result = await axios.get(url);
       if (result.data) {
         var locations = extractLocations(result.data.events);

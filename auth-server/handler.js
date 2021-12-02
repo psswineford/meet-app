@@ -130,6 +130,7 @@ module.exports.getAccessToken = async (event) => {
             timeMin: new Date().toISOString(),
             singleEvents: true,
             orderBy: "startTime",
+            maxEvents: event.queryStringParameters.numberOfEvents,
           },
           (error, response) => {
             if (error) {
