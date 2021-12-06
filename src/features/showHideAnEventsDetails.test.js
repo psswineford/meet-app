@@ -1,27 +1,33 @@
 import React from 'react';
-import { mount } from 'enzyme';
+import { mount, shallow } from 'enzyme';
 import App from '../App';
 import { loadFeature, defineFeature } from 'jest-cucumber';
-
+import Event from '../Event';
+import EventList from '../EventList';
+import { mockData } from '../mock-data';
 
 const feature = loadFeature('./src/features/showHideAnEventsDetails.feature');
 
 defineFeature(feature, test => {
-    test('An event element is collapsed by default', ({ given, when, then }) => {
+    test("An event element is collapsed by default", ({ given, when, then }) => {
         let AppWrapper;
-        given('user has not picked an event', () => {
-            AppWrapper = mount(<App />);
+        let EventListWrapper;
+        let EventWrapper;
+        given("user has not picked an event", () => {
+          AppWrapper = mount(<App />);
         });
-
-        when('the user opens the app', () => {
-            expect(AppWrapper.find('.event')).toBeDefined();
+    
+        when("the user opens the app", () => {
+          EventListWrapper = shallow(<EventList events={mockData} />);
         });
-
-        then('the user should see a list of upcoming events', async () => {
-            const eventDetails = await AppWrapper.find('.event .more-event-info');
-            expect(eventDetails.find('.hide')).toBeDefined();
+    
+        then("the user should see a list of upcoming events", () => {
+          expect(AppWrapper.find(EventList)).toHaveLength(1);
+          expect(EventListWrapper.find(".EventList")).toHaveLength(1);
+          EventWrapper = shallow(<Event event={mockData[0]} />);
+          expect(EventWrapper.find(".hidden")).toHaveLength(1);
         });
-    });
+      });
 
     test('User can expand an event to see its details', ({ given, when, then }) => {
         let AppWrapper;
